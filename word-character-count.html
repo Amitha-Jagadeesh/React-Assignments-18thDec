@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+
+        </title>
+    </head>
+    <body>
+        <div id = 'root'>
+
+        </div>
+        
+        <script src = "js/react.development.js"></script>
+        <script src = "js/react-dom.development.js"></script>
+        <script src = 'js/babel.js'></script>
+
+        <script type="text/babel">
+            const rootHandle = document.getElementById('root')
+
+            class TextArea extends React.Component{
+
+                constructor(props){
+                    super(props)
+                        this.state = {
+                            value :'',
+                            charCount:0,
+                            wordCount :0
+                        };
+                        this.handleChange = this.handleChange.bind(this)                    
+                }
+
+                handleChange(event){
+                    console.log(event.target.value)
+                    this.setState({
+                        value:event.target.value,
+                        charCount:event.target.value.length,
+                        wordCount:event.target.value.split(/\b\S/).length - 1
+                    });
+                }
+
+                render(){
+                    return(
+                        <div>
+                            <h2>Word and Character Count</h2>
+                            <textarea rows = '4' cols = '50' value = {this.state.value} onChange = {this.handleChange}></textarea>
+                            <p>The Word Count is {this.state.wordCount} and Character Count is {this.state.charCount}</p>
+
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<TextArea />,rootHandle)
+        </script>
+    </body>
+</html>

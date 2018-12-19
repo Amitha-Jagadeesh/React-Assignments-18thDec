@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <div id='root'>
+    </div>
+    <script src="../js/react.development.js"></script>
+    <script src="../js/react-dom.development.js"></script>
+    <script src = 'https://unpkg.com/axios/dist/axios.min.js'></script>   
+    <script src="https://unpkg.com/react-image/umd/index.min.js"></script>
+    <script src="../js/babel.js"></script>
+    <script type="text/babel">
+            const rootHandle = document.getElementById('root')
+
+            class GetMyLocation extends React.Component{ 
+                    constructor(props){
+                    super(props)
+                    this.state = {
+                        latitude:'',
+                        longitude:'',
+                        display:'none',
+                        temperature:''
+                    }
+                    this.handleChange = this.handleChange.bind(this)
+                }
+
+                handleChange(){                    
+                    navigator.geolocation.getCurrentPosition((position)=>{
+                        let latitude = position.coords.latitude
+                        let longitude = position.coords.longitude
+                        console.log(latitude,longitude)
+                        axios.get(`https://api.darksky.net/forecast/9d96179297a1b9567dc33b9b4af7a350/${latitude},${longitude}`).then((response)=>{
+                            let result = response.data;
+                            this.setState({
+                                latitude:result.latitude,
+                                longitude:result.longitude,
+                                display:'inline',
+                                temperature:result.currently.temperature
+                            })
+                        }).catch((error)=>
+                        {
+                            console.log('invalid url');
+                        }); 
+                    })
+                }   
+
+                render(){
+                    let position = this.state.latitude+','+this.state.longitude
+                    let img_url = "https://maps.googleapis.com/maps/api/staticmap?center="
+                            + position + "&zoom=14&size=400x300&key=AIzaSyBKgZGAXW2IMBrw2noPhNvyOGIU-9lS8rw";            
+                    return(
+                        <div>
+                            <button type='button' name = 'getMyLocation' onClick = {this.handleChange}>Get My Location</button>
+                            <div style = {{display:this.state.display}}>
+                                <p>The current position is:</p>
+                                <p>Latitude:{this.state.latitude}</p>
+                                <p>Longitude:{this.state.longitude}</p>
+                                <hr></hr>
+                                <p>Current Temperature is:{this.state.temperature}</p>
+                                <img src = {img_url}/> 
+                            </div>
+                        </div>
+                    )
+                }
+            }
+            ReactDOM.render(<GetMyLocation />,rootHandle)
+        </script>
+</body>
+
+</html>

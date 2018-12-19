@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+
+        </title>
+    </head>
+    <body>
+        <div id = 'root'>
+
+        </div>
+        <script src = "../js/react.development.js"></script>
+        <script src = "../js/react-dom.development.js"></script>
+        <script src = "../js/babel.js"></script>
+        <script type = "text/babel">
+            const rootHandle = document.getElementById('root')
+
+            class TempConverter extends React.Component{
+
+                constructor(props){
+                    super(props)
+                    this.state = {
+                        farenheitTextValue:'',
+                        celciusTextValue:''
+                    };
+                    this.handleChange = this.handleChange.bind(this)
+                }
+
+                handleChange(event){
+                    let valueInFarenheit = event.target.value
+                    console.log(valueInFarenheit)
+                    this.setState({
+                        farenheitTextValue:valueInFarenheit,
+                        celciusTextValue: (5/9) *(valueInFarenheit-32)
+                    })
+                    if(!isNaN(valueInFarenheit) && valueInFarenheit.length > 0){
+                        let valueInCelcius = (5/9) *(valueInFarenheit-32)
+                        this.setState({                        
+                        celciusTextValue: valueInCelcius
+                    })
+                    }else{
+                        this.setState({                  
+                        celciusTextValue:''
+                    })
+                    }
+                }
+
+                render(){
+                    return(
+                        <div>
+                            <h2 style={{alignText:'center'}}>Temperature Converter</h2>
+                            <form>
+                                <label style={{marginLeft:'150px'}}>Farenheit</label>
+                                <label style={{marginLeft:'200px'}}>Celcius</label> <br />
+                                <input type = 'text' name = 'farenheit' style={{marginLeft:'100px'}} value = {this.state.farenheitTextValue} onChange = {this.handleChange} />
+                                
+                                <input type = 'text' name = 'celcius' value = {this.state.celciusTextValue} style={{marginLeft:'85px'}}/>
+                            </form>
+                        </div>
+                    )
+                }
+            }
+
+            ReactDOM.render(<TempConverter />,rootHandle)
+        </script>
+    </body>
+</html>
